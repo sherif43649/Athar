@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>المنصة العالمية | ATHAR 2090 Ultimate Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --neon-blue: #00f3ff;
+            --neon-purple: #b000ff;
+            --neon-green: #00ff66;
+            --neon-red: #ff0055;
+            --dark-bg: #030308;
+            --panel-bg: rgba(10, 15, 28, 0.88);
+            --border-color: rgba(0, 243, 255, 0.3);
+            --text-main: #e0f7fc;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Cairo', sans-serif; user-select: none; }
+
+        body {
+            background-color: var(--dark-bg);
+            color: var(--text-main);
+            min-height: 100vh;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(176, 0, 255, 0.12), transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(0, 243, 255, 0.12), transparent 40%),
+                linear-gradient(rgba(0, 243, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 243, 255, 0.03) 1px, transparent 1px);
+            background-size: 100% 100%, 100% 100%, 25px 25px, 25px 25px;
+        }
+
+        /* 7. dynamic Hologram Watermark */
+        #dynamicWatermark {
+            position: fixed;
+            top: 25%;
+            left: 20%;
+            font-size: 1.1rem;
+            color: rgba(0, 243, 255, 0.15);
+            font-family: 'Orbitron', sans-serif;
+            pointer-events: none;
+            z-index: 99999;
+            font-weight: 700;
+            text-shadow: 0 0 5px rgba(0,243,255,0.3);
+            animation: moveWatermark 20s infinite linear alternate;
+        }
+
+        @keyframes moveWatermark {
+            0% { top: 15%; left: 10%; }
+            50% { top: 75%; left: 65%; }
+            100% { top: 35%; left: 80%; }
+        }
+
+        /* Header */
+        header {
+            background: rgba(5, 8, 18, 0.95);
+            border-bottom: 2px solid var(--neon-blue);
+            box-shadow: 0 0 15px rgba(0, 243, 255, 0.3);
+            padding: 12px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(12px);
+        }
+
+        .logo {
+            font-family: 'Orbitron', 'Cairo', sans-serif;
+            font-size: 1.6rem;
+            font-weight: 900;
+            color: var(--neon-blue);
+            text-shadow: 0 0 8px var(--neon-blue);
+        }
+
+        .user-stats-bar {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .streak-pill {
+            background: rgba(255, 0, 85, 0.15);
+            border: 1px solid var(--neon-red);
+            color: var(--neon-red);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.85rem;
+            box-shadow: 0 0 10px rgba(255,0,85,0.3);
+        }
+
+        .xp-pill {
+            background: linear-gradient(45deg, var(--neon-purple), var(--neon-blue));
+            color: #fff;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            font-size: 0.85rem;
+            box-shadow: 0 0 10px var(--neon-purple);
+        }
+
+        /* Dashboard Layout */
+        .dashboard-container {
+            display: grid;
+            grid-template-columns: 2.8fr 1.2fr;
+            gap: 20px;
+            padding: 20px;
+            max-width: 1650px;
+            margin: 0 auto;
+        }
+
+        @media (max-width: 1024px) { .dashboard-container { grid-template-columns: 1fr; } }
+
+        .panel {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.5);
+            backdrop-filter: blur(8px);
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .panel-header {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--neon-blue);
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* 1. Cyber Focus Video Terminal */
+        .video-wrapper {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            background: #000;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid var(--neon-blue);
+            box-shadow: 0 0 20px rgba(0, 243, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .video-wrapper iframe {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+        }
+
+        .focus-warning {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(5, 0, 15, 0.95);
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            color: var(--neon-red);
+            border: 2px solid var(--neon-red);
+            box-shadow: inset 0 0 30px var(--neon-red);
+            text-align: center;
+        }
+
+        /* 3. Skill Tree Nodes */
+        .skill-tree {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            padding: 20px 10px;
+            margin-top: 10px;
+        }
+
+        .skill-tree::before {
+            content: '';
+            position: absolute;
+            top: 50%; left: 5%; right: 5%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--neon-green), var(--neon-blue), var(--neon-purple));
+            z-index: 1;
+        }
+
+        .node {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: #050a14;
+            border: 2px solid var(--neon-blue);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            font-family: Orbitron;
+            position: relative;
+            z-index: 2;
+            cursor: pointer;
+            box-shadow: 0 0 10px var(--neon-blue);
+            transition: 0.3s;
+        }
+
+        .node.completed { border-color: var(--neon-green); box-shadow: 0 0 12px var(--neon-green); color: var(--neon-green); }
+        .node.locked { border-color: var(--neon-purple); color: #555; box-shadow: none; opacity: 0.6; }
+
+        .btn-cyber {
+            background: linear-gradient(45deg, var(--neon-blue), var(--neon-purple));
+            color: #fff; border: none; padding: 8px 16px; border-radius: 6px;
+            font-weight: 700; cursor: pointer; box-shadow: 0 0 10px rgba(0,243,255,0.3); transition: 0.3s;
+        }
+        .btn-cyber:hover { box-shadow: 0 0 20px var(--neon-blue); transform: scale(1.02); }
+
+        /* 4. Timestamped Notes */
+        .notes-list { max-height: 150px; overflow-y: auto; margin-top: 10px; }
+        .note-item {
+            background: rgba(0, 243, 255, 0.05);
+            border-right: 3px solid var(--neon-blue);
+            padding: 6px 10px; margin-bottom: 6px;
+            display: flex; justify-content: space-between; font-size: 0.85rem;
+        }
+
+        /* 2. ATHAR AI Assistant Chat */
+        .ai-box { height: 200px; overflow-y: auto; font-size: 0.85rem; display: flex; flex-direction: column; gap: 8px; }
+        .ai-msg { background: rgba(176, 0, 255, 0.1); border-right: 3px solid var(--neon-purple); padding: 8px; border-radius: 4px; }
+        .user-msg { background: rgba(0, 243, 255, 0.1); border-right: 3px solid var(--neon-blue); padding: 8px; border-radius: 4px; }
+
+        /* 6. Radar Chart Simulation */
+        .radar-bar { height: 8px; background: rgba(255,255,255,0.1); border-radius: 4px; overflow: hidden; margin-top: 4px; }
+        .radar-fill { height: 100%; background: linear-gradient(90deg, var(--neon-blue), var(--neon-green)); }
+    </style>
+</head>
+<body oncontextmenu="return false;">
+
+    <div id="dynamicWatermark">ATHAR 2090 | <span id="wmUser">01000000000</span></div>
+
+    <!-- Header -->
+    <header>
+        <div class="logo">⚡ ATHAR 2090 ULTIMATE</div>
+        <div class="user-stats-bar">
+            <div class="streak-pill">🔥 7 أيام متتالية</div>
+            <div class="xp-pill">XP <span id="userXP">1450</span></div>
+            <span id="navCode" style="color: var(--neon-blue); font-family: Orbitron; font-size:0.9rem;">ATHAR-ST90</span>
+            <button onclick="logout()" style="background:transparent; border:none; color:var(--neon-red); cursor:pointer; font-weight:bold;">خروج 🚪</button>
+        </div>
+    </header>
+
+    <div class="dashboard-container">
+        
+        <!-- Left Main Column -->
+        <div class="main-column">
+            
+            <!-- Video Terminal with Focus Protection -->
+            <div class="panel">
+                <div class="panel-header">
+                    <span>🎬 المحاضرة الحية: الأنظمة الذكية ومعالجة البيانات 2090</span>
+                    <span style="color: var(--neon-green); font-size: 0.8rem;">● وضع التركيز النيون مفعّل</span>
+                </div>
+                <div class="video-wrapper">
+                    <div class="focus-warning" id="focusWarning">
+                        <h2>⚠️ ATTENTION: FOCUS LOST</h2>
+                        <p style="margin-top: 8px;">تم إيقاف المحاضرة مؤقتاً لتشتت التركيز والخروج من الصفحة!</p>
+                        <button class="btn-cyber" style="margin-top:15px;" onclick="resumeFocus()">العودة للدرس ⚡</button>
+                    </div>
+                    <iframe id="lectureIframe" src="https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ?enablejsapi=1" title="Cyber Lecture" frameborder="0" allowfullscreen></iframe>
+                </div>
+            </div>
+
+            <!-- 3. Skill Tree Path Matrix -->
+            <div class="panel">
+                <div class="panel-header"><span>🗺️ شجرة مسار المهارات (Holographic Skill Tree)</span></div>
+                <div class="skill-tree">
+                    <div class="node completed">01</div>
+                    <div class="node completed">02</div>
+                    <div class="node" style="border-color: var(--neon-blue); color: var(--neon-blue);">03</div>
+                    <div class="node locked">04</div>
+                    <div class="node locked">05</div>
+                </div>
+            </div>
+
+            <!-- 4. Timestamped Cyber Notes -->
+            <div class="panel">
+                <div class="panel-header">
+                    <span>📝 كراسة الملاحظات الذكية بالزمن (Timestamp Notes)</span>
+                    <button class="btn-cyber" style="font-size:0.75rem; padding:4px 10px;" onclick="addTimestampNote()">+ إضافة ملاحظة بالدقيقة الحالية</button>
+                </div>
+                <div class="notes-list" id="notesList">
+                    <div class="note-item">
+                        <span>قانون الطاقة الكلية وتطبيق المعادلات المشفرة</span>
+                        <span style="color:var(--neon-blue); font-family:Orbitron; cursor:pointer;">[12:45] ⏱️</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 6. Exam Radar Analyzer -->
+            <div class="panel">
+                <div class="panel-header"><span>📊 تحليل الأداء والرادار (Cyber Radar Analyzer)</span></div>
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px; font-size:0.85rem;">
+                    <div>
+                        <span>سرعة البديهة والحل: 92%</span>
+                        <div class="radar-bar"><div class="radar-fill" style="width:92%;"></div></div>
+                    </div>
+                    <div>
+                        <span>الدقة والتركيز: 85%</span>
+                        <div class="radar-bar"><div class="radar-fill" style="width:85%;"></div></div>
+                    </div>
+                    <div>
+                        <span>استيعاب مفاهيم الفيزياء: 96%</span>
+                        <div class="radar-bar"><div class="radar-fill" style="width:96%;"></div></div>
+                    </div>
+                    <div>
+                        <span>التطبيق الرياضي: 78%</span>
+                        <div class="radar-bar"><div class="radar-fill" style="width:78%; background: linear-gradient(90deg, var(--neon-purple), var(--neon-red));"></div></div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Right Side Column -->
+        <div class="side-column">
+            
+            <!-- 2. ATHAR AI Assistant -->
+            <div class="panel">
+                <div class="panel-header"><span>🤖 المساعد الذكي (ATHAR AI)</span></div>
+                <div class="ai-box" id="aiBox">
+                    <div class="ai-msg">مرحباً يا بطل! أنا ATHAR AI. جاهز لتلخيص المحاضرة أو إجابة أي سؤال معقد فوراً.</div>
+                </div>
+                <div style="display:flex; gap:5px; margin-top:10px;">
+                    <input type="text" id="aiInput" style="flex:1; background:#02050c; border:1px solid var(--border-color); color:#fff; padding:6px; border-radius:4px; font-size:0.85rem;" placeholder="اسأل الذكاء الاصطناعي...">
+                    <button class="btn-cyber" style="font-size:0.8rem; padding:6px 12px;" onclick="askAI()">اسأل ⚡</button>
+                </div>
+            </div>
+
+            <!-- 5. Daily Quests & Badges -->
+            <div class="panel">
+                <div class="panel-header"><span>🏅 التحديات والأوسمة اليومية</span></div>
+                <div style="display:flex; flex-direction:column; gap:8px; font-size:0.85rem;">
+                    <div style="background:rgba(0,243,255,0.05); padding:8px; border-radius:6px; display:flex; justify-content:space-between;">
+                        <span>🎯 شاهد 30 دقيقة اليوم</span>
+                        <span style="color:var(--neon-green);">مكتمل +200 XP</span>
+                    </div>
+                    <div style="background:rgba(0,243,255,0.05); padding:8px; border-radius:6px; display:flex; justify-content:space-between;">
+                        <span>⚡ حل الاختبار السريع بنجاح</span>
+                        <span style="color:var(--neon-purple);">جارٍ +100 XP</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Global Leaderboard -->
+            <div class="panel">
+                <div class="panel-header"><span>🏆 قائمة أبطال 2090</span></div>
+                <div style="font-size:0.85rem;">
+                    <div style="display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px solid rgba(255,255,255,0.05);">
+                        <span>🥇 شريف محمد (سوهاج)</span>
+                        <span style="color:var(--neon-blue); font-weight:bold; font-family:Orbitron;">3100 XP</span>
+                    </div>
+                    <div style="display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px solid rgba(255,255,255,0.05);">
+                        <span>🥈 أحمد علي (القاهرة)</span>
+                        <span style="color:var(--neon-blue); font-weight:bold; font-family:Orbitron;">2900 XP</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        const savedPhone = localStorage.getItem('studentPhone') || '01000000000';
+        const savedCode = localStorage.getItem('studentCode') || 'ATHAR-ST90';
+
+        document.getElementById('navCode').innerText = savedCode;
+        document.getElementById('wmUser').innerText = savedPhone + ' | ' + savedCode;
+
+        // 1. Focus Mode Listener
+        document.addEventListener('visibilitychange', function() {
+            if (document.hidden) {
+                document.getElementById('focusWarning').style.display = 'flex';
+            }
+        });
+
+        function resumeFocus() {
+            document.getElementById('focusWarning').style.display = 'none';
+        }
+
+        // 2. ATHAR AI Assistant Demo Response
+        function askAI() {
+            const input = document.getElementById('aiInput');
+            const text = input.value.trim();
+            if(!text) return;
+
+            const aiBox = document.getElementById('aiBox');
+            aiBox.innerHTML += `<div class="user-msg">${text}</div>`;
+            input.value = '';
+
+            setTimeout(() => {
+                aiBox.innerHTML += `<div class="ai-msg">🤖 تحليل ATHAR AI: بناءً على سؤالك حول "${text}"، الإجابة تعتمد على قانون المعالجة الرقمية المشفرة حيث يتم تطبيق القوة الحسابية المباشرة للوصول للنتيجة المطلوبة!</div>`;
+                aiBox.scrollTop = aiBox.scrollHeight;
+            }, 800);
+        }
+
+        // 4. Timestamped Notes
+        function addTimestampNote() {
+            const noteText = prompt('اكتب ملاحظتك التلخيصية للدرس:');
+            if(!noteText) return;
+
+            const list = document.getElementById('notesList');
+            const randomMin = Math.floor(Math.random() * 20) + 1;
+            list.innerHTML += `
+                <div class="note-item">
+                    <span>${noteText}</span>
+                    <span style="color:var(--neon-blue); font-family:Orbitron; cursor:pointer;">[${randomMin}:15] ⏱️</span>
+                </div>
+            `;
+        }
+
+        function logout() {
+            localStorage.clear();
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+  </html>
