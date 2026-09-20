@@ -133,82 +133,32 @@
             box-shadow: 0 0 25px rgba(0, 243, 255, 0.8);
         }
 
-        /* نافذة التنبيه المستقبلي (Cyberpunk Modal) */
         .modal-overlay {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0, 0, 0, 0.85);
             backdrop-filter: blur(8px);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 10000;
-            opacity: 0;
-            pointer-events: none;
+            display: flex; justify-content: center; align-items: center;
+            z-index: 10000; opacity: 0; pointer-events: none;
             transition: opacity 0.3s ease;
         }
 
-        .modal-overlay.active {
-            opacity: 1;
-            pointer-events: auto;
-        }
+        .modal-overlay.active { opacity: 1; pointer-events: auto; }
 
         .modal-box {
             background: #080d1a;
             border: 2px solid var(--neon-blue);
             box-shadow: 0 0 30px var(--neon-blue);
-            border-radius: 12px;
-            padding: 25px;
-            width: 85%;
-            max-width: 380px;
-            text-align: center;
-            transform: scale(0.8);
-            transition: transform 0.3s ease;
+            border-radius: 12px; padding: 25px; width: 85%; max-width: 380px;
+            text-align: center; transform: scale(0.8); transition: transform 0.3s ease;
         }
 
-        .modal-overlay.active .modal-box {
-            transform: scale(1);
-        }
+        .modal-overlay.active .modal-box { transform: scale(1); }
 
-        .modal-title {
-            font-size: 1.3rem;
-            color: var(--neon-blue);
-            margin-bottom: 12px;
-            font-weight: 700;
-        }
-
-        .modal-message {
-            font-size: 0.95rem;
-            color: #d1f4ff;
-            margin-bottom: 20px;
-            line-height: 1.5;
-        }
-
-        .modal-btn {
-            padding: 10px 25px;
-            background: transparent;
-            border: 1px solid var(--neon-blue);
-            color: var(--neon-blue);
-            font-weight: 700;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .modal-btn:hover {
-            background: var(--neon-blue);
-            color: #000;
-            box-shadow: 0 0 15px var(--neon-blue);
-        }
-
-        .footer-text {
-            margin-top: 20px;
-            font-size: 0.75rem;
-            color: rgba(224, 247, 252, 0.5);
-        }
+        .modal-title { font-size: 1.3rem; color: var(--neon-blue); margin-bottom: 12px; font-weight: 700; }
+        .modal-message { font-size: 0.95rem; color: #d1f4ff; margin-bottom: 20px; line-height: 1.5; }
+        
+        .footer-text { margin-top: 20px; font-size: 0.75rem; color: rgba(224, 247, 252, 0.5); }
     </style>
 </head>
 <body oncontextmenu="return false;">
@@ -238,41 +188,14 @@
         </div>
     </div>
 
-    <!-- نافذة التنبيه المستقبلية Custom Modal -->
     <div class="modal-overlay" id="customModal">
         <div class="modal-box" id="modalBox">
             <div class="modal-title" id="modalTitle">تنبيه النظام</div>
             <div class="modal-message" id="modalMessage">المحتوى هنا</div>
-            <button class="modal-btn" onclick="closeCustomModal()">تأكيد ⚡</button>
         </div>
     </div>
 
-    <!-- Firebase SDKs -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-
     <script>
-        const firebaseConfig = {
-            apiKey: "AIzaSyBhmdTHS2Kamnl_79yjT7H3KQaCcuhxFt8",
-            authDomain: "athar-2090.firebaseapp.com",
-            projectId: "athar-2090",
-            storageBucket: "athar-2090.firebasestorage.app",
-            messagingSenderId: "910820839182",
-            appId: "1:910820839182:web:8bb94f0c6a68b5289c115f",
-            measurementId: "G-GL2WXGCJGS"
-        };
-
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
-
-        // منع اختصارات المطورين
-        document.addEventListener('keydown', function(e) {
-            if (e.keyCode == 123 || (e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 74)) || (e.ctrlKey && e.keyCode == 85)) {
-                e.preventDefault();
-            }
-        });
-
-        // دالة إظهار نافذة Cyberpunk التفاعلية
         function showCustomModal(title, message, isError = false) {
             const modal = document.getElementById('customModal');
             const modalBox = document.getElementById('modalBox');
@@ -292,11 +215,6 @@
             modal.classList.add('active');
         }
 
-        function closeCustomModal() {
-            document.getElementById('customModal').classList.remove('active');
-        }
-
-        // التحقق وتجربة الدخول
         document.getElementById('loginForm').addEventListener('submit', function(e) {
             e.preventDefault();
             const phone = document.getElementById('phone').value;
@@ -305,11 +223,20 @@
             const egyPhoneRegex = /^01[0125][0-9]{8}$/;
 
             if (!egyPhoneRegex.test(phone)) {
-                showCustomModal('خطأ في التحقق ⚠️', 'يرجى إدخال رقم هاتف مصري صحيح مكون من 11 رقم ويشمل كود الشبكة (010, 011, 012, 015).', true);
+                showCustomModal('خطأ في التحقق ⚠️', 'يرجى إدخال رقم هاتف مصري صحيح مكون من 11 رقم.', true);
                 return;
             }
 
-            showCustomModal('تم التحقق بنجاح 🚀', 'مرحباً بك في نظام ATHAR 2090. جاري تجهيز الخادم التعليمي...');
+            // حفظ بيانات الطالب في المتصفح
+            localStorage.setItem('studentPhone', phone);
+            localStorage.setItem('studentCode', code);
+
+            showCustomModal('تم التحقق بنجاح 🚀', 'مرحباً بك في نظام ATHAR 2090. جاري توجيهك للوحة التحكم...');
+
+            // التوجه تلقائياً إلى لوحة التحكم dashboard.html بعد ثانية واحدة
+            setTimeout(() => {
+                window.location.href = 'dashboard.html';
+            }, 1200);
         });
     </script>
 </body>
